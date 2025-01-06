@@ -1,10 +1,10 @@
 # Project Title
 
-Data Providers
+Data Extractors
 
 ## Description
 
-Provides access to external data providers data, such as yahoo financial data.
+Provides the extraction layer between the providers and a destination db (here Postgres)
 
 ## Getting Started
 
@@ -30,7 +30,7 @@ Provides access to external data providers data, such as yahoo financial data.
     * [Optional]:
         * In case you get this error, then follows the resolution steps:
             * Error: "[...]Cargo, the Rust package manager, is not installed or is not on PATH. This package requires Rust and Cargo to compile extensions. [...]"
-            * Resilution Steps: 
+            * Resolution Steps: 
                 * In the venv terminal:
                     * run curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
                     * . "$HOME/.cargo/env" 
