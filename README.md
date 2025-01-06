@@ -21,7 +21,6 @@ Provides access to external data providers data, such as yahoo financial data.
     * source ./venv/bin/activate
 * Install Requirements:
     * python3 -m pip install --upgrade pip
-    * pip3 install -r requirements.txt
 * Build Package:
     * python3 setup.py sdist bdist_wheel
     * pip3 install -e .
