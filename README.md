@@ -16,6 +16,9 @@ Provides access to external data providers data, such as yahoo financial data.
 
 * Git clone the project
     * git clone https://github.com/FredGH/data_providers.git
+* Ensure python3 is pointing to the 3.13
+    * Go to https://www.python.org/downloads/ and download Python 3.13.x
+    * Go to Visual Studio Code, select the Python Interpreter (Shift+Cmd+P) as Python 3.13.x
 * Create the Python Env
     * python3 -m venv venv
     * source ./venv/bin/activate
@@ -24,6 +27,14 @@ Provides access to external data providers data, such as yahoo financial data.
 * Build Package:
     * python3 setup.py sdist bdist_wheel
     * pip3 install -e .
+    * [Optional]:
+        * In case you get this error, then follows the resolution steps:
+            * Error: "[...]Cargo, the Rust package manager, is not installed or is not on PATH. This package requires Rust and Cargo to compile extensions. [...]"
+            * Resilution Steps: 
+                * In the venv terminal:
+                    * run curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+                    * . "$HOME/.cargo/env" 
+                    *  pip3 install -e .
 * Tag New Release & Push:
     * git tag 0.0.x -m "Release details"
     * git push origin 0.0.x
