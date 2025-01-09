@@ -1,5 +1,5 @@
 coverage==7.6.1
-data_providers @ git+https://github.com/FredGH/data_providers.git@0.0.5
+data_providers @ git+https://github.com/FredGH/data_providers.git@0.0.1
 dlt[postgres]>=0.3.8
 sqlalchemy==2.0.34
 sqlalchemy_utils==0.41.2

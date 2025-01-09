@@ -40,6 +40,7 @@ Provides the extraction layer between the providers and a destination db (here P
 * Tag New Release & Push:
     * git tag 0.0.x -m "Release details"
     * git push origin 0.0.x
+    * git push
 * Install Package:
     *  Go to Settings > Developer Settings > Personal access tokens (classic) > Generate new token with note e.g. "Upload package"
     *  Ensure you check the write:packages scope to grant the necessary permissions.
@@ -47,12 +48,16 @@ Provides the extraction layer between the providers and a destination db (here P
     * Get your Github user name, e.g. "my_user_name"
         * Install the private package using the following:
         * Template:
-            * pip install git+https://{{ your access token }}@github.com/{{ username }}/{{ repository name}}.git@{{ tag/version }}#egg={{ package name }}
             * pip install git+https://github.com/{{ username }}/{{ package name }}.git@{{ tag/version }}
+            * [Optional] pip install git+https://{{ your access token }}@github.com/{{ username }}/{{ repository name}}.git@{{ tag/version }}#egg={{ package name }}
         * Example:
             * pip install git+https://github.com/{{ username }}/extractor.git@0.0.x
-            # * pip install git+https://12345@github.com/{{ username }}/extrator.git@0.0.x#egg=extractor
-    
+            * [Optional] pip install git+https://12345@github.com/{{ username }}/extrator.git@0.0.x#egg=extractor
+    * [Optional] Deleting tags:
+        * List tags: git tag -l
+        * Delete origin: git push origin :refs/tags/{{tagname}} (e.g. 0.01)
+        * Delete locally: git tag --delete {{tagname}} (e.g. 0.01)
+#
 ### Executing program
 
 * N/A
