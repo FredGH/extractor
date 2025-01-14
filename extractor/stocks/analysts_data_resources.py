@@ -1,4 +1,4 @@
-import data_providers.stocks.analysis_data as ad
+import data_providers.stocks.analysts_data as ad
 import data_providers.stocks.ticker_data as td
 import dlt
 import pandas as pd
