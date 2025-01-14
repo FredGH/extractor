@@ -13,6 +13,7 @@ Provides the extraction layer between the providers and a destination db (here P
 * N/A
 
 ### Installing
+* Note: Currently the version dlt==1.5.0 works with Python 3.11 (not Python 3.13)
 
 * Git clone the project
     * git clone https://github.com/FredGH/extrator.git
