@@ -16,19 +16,21 @@ Provides the extraction layer between the providers and a destination db (here P
 
 * Git clone the project
     * git clone https://github.com/FredGH/extrator.git
-* Ensure python3 is pointing to the 3.13
-    * Go to https://www.python.org/downloads/ and download Python 3.13.x
-    * Go to Visual Studio Code, select the Python Interpreter (Shift+Cmd+P) as Python 3.13.x
+* Ensure python3 is pointing to the 3.11
+    * Go to https://www.python.org/downloads/ and download Python 3.11.x
+    * Go to Visual Studio Code, select the Python Interpreter (Shift+Cmd+P) as Python 3.11.x
 * Create the Python Env
-    * rm -rf venv/ 
-    * python3 -m venv venv
+    * rm -rf venv/
+    * In Visual Studio Vode -> Ctrl+Shift+P -> Select Interpreter ->  Python 3.11.x
+    * python3.11 -m venv venv
     * source ./venv/bin/activate
+    * [optional] check Python3 version -> python3 -> should show Python 3.11.x
 * Install Requirements:
-    * python3 -m pip install --upgrade pip
+    * python3.11 -m pip install --upgrade pip
 * Build Package:
-    * pip3 install -U pip setuptools
-    * python3 setup.py sdist bdist_wheel
-    * pip3 install -e .
+    * pip3.11 install -U pip setuptools
+    * python3.11 setup.py sdist bdist_wheel
+    * pip3.11 install -e .
     * [Optional]:
         * In case you get this error, then follows the resolution steps:
             * Error: "[...]Cargo, the Rust package manager, is not installed or is not on PATH. This package requires Rust and Cargo to compile extensions. [...]"
@@ -36,7 +38,7 @@ Provides the extraction layer between the providers and a destination db (here P
                 * In the venv terminal:
                     * run curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
                     * . "$HOME/.cargo/env" 
-                    *  pip3 install -e .
+                    *  pip3.11 install -e .
 * Tag New Release & Push:
     * git tag 0.0.x -m "Release details"
     * git push origin 0.0.x
@@ -48,11 +50,11 @@ Provides the extraction layer between the providers and a destination db (here P
     * Get your Github user name, e.g. "my_user_name"
         * Install the private package using the following:
         * Template:
-            * pip install git+https://github.com/{{ username }}/{{ package name }}.git@{{ tag/version }}
-            * [Optional] pip install git+https://{{ your access token }}@github.com/{{ username }}/{{ repository name}}.git@{{ tag/version }}#egg={{ package name }}
+            * pip3.11 install git+https://github.com/{{ username }}/{{ package name }}.git@{{ tag/version }}
+            * [Optional] pip3.11 install git+https://{{ your access token }}@github.com/{{ username }}/{{ repository name}}.git@{{ tag/version }}#egg={{ package name }}
         * Example:
-            * pip install git+https://github.com/{{ username }}/extractor.git@0.0.x
-            * [Optional] pip install git+https://12345@github.com/{{ username }}/extrator.git@0.0.x#egg=extractor
+            * pip3.11 install git+https://github.com/{{ username }}/extractor.git@0.0.x
+            * [Optional] pip3.11 install git+https://12345@github.com/{{ username }}/extrator.git@0.0.x#egg=extractor
     * [Optional] Deleting tags:
         * List tags: git tag -l
         * Delete origin: git push origin :refs/tags/{{tagname}} (e.g. 0.01)

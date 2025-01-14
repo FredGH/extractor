@@ -7,7 +7,7 @@ from typing import Generator, Dict, Any
 
 class AnalystsDataSource():
     @classmethod
-    @dlt.resource(name="analyst_price_targets")
+    @dlt.resource(name="analyst_price_targets",parallelized=True )
     def get_analyst_price_targets(cls, name:str)->Generator[Dict[str, Any], None, None]:
         ticker = td.TickerData(name).get_ticker
         analysts_data = ad.AnalystsData(ticker)

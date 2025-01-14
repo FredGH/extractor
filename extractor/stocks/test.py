@@ -41,7 +41,7 @@ if __name__ == "__main__":
                             dataset_name ="landing")
     load_info = pipeline.run(data=[resource1, resource2], 
                             #table_name=table_name,
-                            #schema_contract=schema_contract,
+                            schema_contract=schema_contract,
                             write_disposition=write_disposition)
 
     #for key in resource:
