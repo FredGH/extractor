@@ -25,6 +25,7 @@ Provides the extraction layer between the providers and a destination db (here P
     * In Visual Studio Vode -> Ctrl+Shift+P -> Select Interpreter ->  Python 3.11.x
     * python3.11 -m venv venv
     * source ./venv/bin/activate
+    * In Visual Studio Vode -> Ctrl+Shift+P -> Select Interpreter ->  (venv) Python 3.11.x
     * [optional] check Python3 version -> python3 -> should show Python 3.11.x
 * Install Requirements:
     * python3.11 -m pip install --upgrade pip
@@ -60,6 +61,15 @@ Provides the extraction layer between the providers and a destination db (here P
         * List tags: git tag -l
         * Delete origin: git push origin :refs/tags/{{tagname}} (e.g. 0.01)
         * Delete locally: git tag --delete {{tagname}} (e.g. 0.01)
+
+* Code cleanup & Standardisation
+    * ruff check . &isort . &black .
+
+* Run unit tests
+    * run in /dataproviders 
+        * coverage run -m unittest discover
+        * coverage report -m (or coverage hml)
+
 #
 ### Executing program
 

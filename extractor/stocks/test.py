@@ -11,7 +11,7 @@ write_disposition="replace"
 progress="log"
 destination="postgres"
 
-resource1= hist_dr.get_historical_data(tickers)
+resource1= hist_dr.get_historical_data(tickers,period="max" )
 #resource = AccountingDataDataSource().get_balance_sheet(ticker)
 resource2 = analysts_dr.get_analyst_price_targets(tickers)
 pipeline = dlt.pipeline(pipeline_name=pipeline_name, 
