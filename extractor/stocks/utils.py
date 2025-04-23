@@ -2,7 +2,7 @@ import pandas as pd
 
 class Utils():
     @classmethod
-    def concat_dataframes(cls, dest:pd.DataFrame(), source:pd.DataFrame(), reset_index=True)->pd.DataFrame():
+    def concat_dataframes(cls, dest:pd.DataFrame(), source:pd.DataFrame(), reset_index=False)->pd.DataFrame():
         if len(dest) == 0:
             res = source
         else:

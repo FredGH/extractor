@@ -1,6 +1,4 @@
-# Project Title
-
-Data Extractors
+# Data Extractors
 
 ## Description
 
@@ -66,7 +64,7 @@ Provides the extraction layer between the providers and a destination db (here P
     * ruff check . &isort . &black .
 
 * Run unit tests
-    * run in /dataproviders 
+    * run in /extractor 
         * coverage run -m unittest discover
         * coverage report -m (or coverage hml)
 
