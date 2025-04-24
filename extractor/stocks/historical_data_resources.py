@@ -10,7 +10,8 @@ from utils import Utils as utl
 class HistoricalDataResources():
     
     @classmethod
-    def __get_historical_data(cls, names:list, period:str="1mo")->Generator[Dict[str, Any], None, None]:
+    @dlt.resource(name="historical_data", parallelized=True)
+    def get_historical_data(cls, names:list, period:str="1mo")->Generator[Dict[str, Any], None, None]:
         try:
             res = pd.DataFrame()
             for name in names:
@@ -30,16 +31,3 @@ class HistoricalDataResources():
             print("get_historical_data is complete with FAILURE - Exception: {0}".format(e))
         finally:
             print("continue")
-    
-    @classmethod
-    @dlt.resource(name="stock_historical_data", parallelized=True)
-    def get_stock_historical_data(cls, names:list, period:str="1mo")->Generator[Dict[str, Any], None, None]:
-        yield cls.__get_historical_data( names = names,
-                                          period = period)
-    
-    @classmethod
-    @dlt.resource(name="index_historical_data", parallelized=True)
-    def get_index_historical_data(cls, names:list, period:str="1mo")->Generator[Dict[str, Any], None, None]:
-        yield cls.__get_historical_data( names = names,
-                                         period = period)
- 

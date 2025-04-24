@@ -15,7 +15,7 @@ class AnalystsDataSource():
             for name in names:
                 ticker = td.TickerData(name).get_ticker
                 analysts_data = ad.AnalystsData(ticker)
-                sub_res = analysts_data.get_ranalyst_price_targets
+                sub_res = analysts_data.get_analyst_price_targets
                 sub_res["name"] = name
                 res = utl.concat_dicts(dest=res, source=sub_res)
             print("get_analyst_price_targets is complete with SUCCESS")
