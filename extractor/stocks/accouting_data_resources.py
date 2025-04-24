@@ -13,7 +13,6 @@ class AccountingDataDataResources():
     @classmethod
     @dlt.resource(name="get_balance_sheet_data")
     def get_balance_sheet(cls, name:str)->Generator[Dict[str, Any], None, None]:
-
         def dictRecursiveFormat(d): 
             for key, val in list(d.items()):
                 if isinstance(key, datetime.datetime): 
