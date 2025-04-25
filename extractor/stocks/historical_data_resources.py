@@ -1,6 +1,6 @@
 import data_providers.stocks.historical_data as hd
 import data_providers.stocks.ticker_data as td
-import utils as u
+import datetime
 import dlt
 import pandas as pd
 
@@ -11,7 +11,7 @@ class HistoricalDataResources():
     
     @classmethod
     @dlt.resource(name="historical_data", parallelized=True)
-    def get_historical_data(cls, names:list, period:str="1mo")->Generator[Dict[str, Any], None, None]:
+    def get_historical_data(cls, updated_at:datetime, names:list, period:str="1mo")->Generator[Dict[str, Any], None, None]:
         try:
             res = pd.DataFrame()
             for name in names:
@@ -19,11 +19,15 @@ class HistoricalDataResources():
                 historical_data = hd.HistoricalData(ticker)
                 sub_res = historical_data.get_historical_data(period)
                 sub_res["name"] = name
-                res = utl.concat_dataframes(dest=res, source=sub_res)
+                if sub_res is not None:
+                    sub_res = utl.add_audit_info(dest= sub_res, updated_at=updated_at)
+                    res = utl.concat_dataframes(dest=res, source=sub_res)
+                else:
+                    print(f"get_historical_data ->  None, i.e. not supported for the ticker: {ticker}")    
             res = res.reset_index()
             res = res.to_dict(orient='records')
             if len(res) == 0:
-                raise Exception(f"No record found for {name}")
+                print(f"get_historical_data -> No record found for ticker: {name}")
             print("get_historical_data is complete with SUCCESS")
             yield res
         except Exception as e:

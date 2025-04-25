@@ -1,6 +1,6 @@
 import data_providers.stocks.info_data as id
 import data_providers.stocks.ticker_data as td
-import utils as u
+import datetime
 import dlt
 import pandas as pd
 
@@ -11,7 +11,7 @@ class InfoDataResources():
     
     @classmethod
     @dlt.resource(name="info_data", parallelized=True)
-    def get_info_data(cls, names:list, period:str="1mo")->Generator[Dict[str, Any], None, None]:
+    def get_info_data(cls, updated_at:datetime, names:list, period:str="1mo")->Generator[Dict[str, Any], None, None]:
         try:
             res = {}
             for name in names:
@@ -19,12 +19,13 @@ class InfoDataResources():
                 info_data = id.InfoData(ticker)
                 sub_res = info_data.get_info
                 sub_res["name"] = name
-                #res = utl.concat_dataframes(dest=res, source=sub_res)
-                res = utl.concat_dicts(dest=res, source=sub_res)
-            #res = res.reset_index()
-            #res = res.to_dict(orient='records')
+                if sub_res is not None:
+                    sub_res = utl.add_audit_info(dest= sub_res, updated_at=updated_at)
+                    res = utl.concat_dicts(dest=res, source=sub_res)
+                else:
+                    print(f"get_info_data -> None, i.e. not supported for the ticker: {ticker}")    
             if len(res) == 0:
-                raise Exception(f"No record found for {name}")
+                print(f"get_info_data -> No record found for ticker: {name}")
             print("get_info_data is complete with SUCCESS")
             yield res
         except Exception as e:
