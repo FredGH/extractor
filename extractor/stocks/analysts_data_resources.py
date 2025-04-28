@@ -10,7 +10,7 @@ from utils import Utils as utl
 class AnalystsDataSource():
     @classmethod
     @dlt.resource(name="analyst_price_targets",parallelized=True )
-    def get_analyst_price_targets(cls,updated_at:datetime, names:list)->Generator[Dict[str, Any], None, None]:
+    def get_analyst_price_targets(cls, names:list, updated_at:datetime=None, time_zone:str="", updated_by:str="")->Generator[Dict[str, Any], None, None]:
         try:
             res = {}
             for name in names:
@@ -19,7 +19,8 @@ class AnalystsDataSource():
                 sub_res = analysts_data.get_analyst_price_targets
                 sub_res["name"] = name
                 if sub_res is not None:
-                    sub_res = utl.add_audit_info(dest= sub_res, updated_at=updated_at)
+
+                    sub_res = utl.add_audit_info(dest= sub_res, updated_at=updated_at, time_zone=time_zone, updated_by=updated_by)
                     res = utl.concat_dicts(dest=res, source=sub_res)
                 else:
                     print(f"get_analyst_price_targets -> None, i.e. not supported for the ticker: {ticker}")    

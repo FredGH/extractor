@@ -11,7 +11,7 @@ class HistoricalDataResources():
     
     @classmethod
     @dlt.resource(name="historical_data", parallelized=True)
-    def get_historical_data(cls, updated_at:datetime, names:list, period:str="1mo")->Generator[Dict[str, Any], None, None]:
+    def get_historical_data(cls, names:list, period:str="1mo", updated_at:datetime=None, time_zone:str="", updated_by:str="")->Generator[Dict[str, Any], None, None]:
         try:
             res = pd.DataFrame()
             for name in names:
@@ -20,7 +20,7 @@ class HistoricalDataResources():
                 sub_res = historical_data.get_historical_data(period)
                 sub_res["name"] = name
                 if sub_res is not None:
-                    sub_res = utl.add_audit_info(dest= sub_res, updated_at=updated_at)
+                    sub_res = utl.add_audit_info(dest= sub_res, updated_at=updated_at, time_zone=time_zone, updated_by=updated_at)
                     res = utl.concat_dataframes(dest=res, source=sub_res)
                 else:
                     print(f"get_historical_data ->  None, i.e. not supported for the ticker: {ticker}")    
