@@ -19,24 +19,21 @@ class Utils():
         return dest | source 
     
     @classmethod
-    def add_audit_info(cls,dest:Union[Dict ,pd.DataFrame], updated_at:datetime=None, time_zone:str="", updated_by:str="")->Dict:
+    def add_audit_info(cls,dest:Union[Dict ,pd.DataFrame], updated_at:datetime=None,  updated_by:str="")->Dict:
         if updated_at is None:
             raise Exception("add_audit_info() -> updated_at cannot be None")
-        if len(time_zone) == 0:
-            raise Exception("add_audit_info() -> time_zone cannot be empty")
-        if len(updated_by) == 0:
+        if updated_by is None:
             raise Exception("add_audit_info() -> updated_by cannot be empty")
         if dest is not None:
             if  isinstance(dest, dict) or isinstance(dest, pd.DataFrame):
                 dest["updated_at"] = updated_at
-                dest["tz"] = time_zone
                 dest["updated_by"] = updated_by
             else:   
                 raise Exception(f"add_audit_info_dicts() -> type:  {type(res)} is not supported ")
         return dest 
     
     @classmethod
-    def add_audit_info_nested_dictionaries(cls, name:str="", dict: Dict[Any, Any]=None, updated_at:datetime=None, time_zone:str="", updated_by:str="system") -> List[Dict[Any, Any]]:
+    def add_audit_info_nested_dictionaries(cls, name:str="", dict: Dict[Any, Any]=None, updated_at:datetime=None, updated_by:str="system") -> List[Dict[Any, Any]]:
         """
         Extracts all nested dictionaries that are direct values within a given dictionary.
 
@@ -48,14 +45,14 @@ class Utils():
         """
         if len(name) == 0:
             raise Exception("add_audit_info_nested_dictionaries() -> name cannot be empty")
-        if dict is None:
-            raise Exception("add_audit_info_nested_dictionaries() -> dic cannot be None")
- 
-        for key in dict:
-            value = dict[key]
-            if isinstance(value, Dict):
-                value["name"] = name
-                dict[key] = cls.add_audit_info(dest= value,  updated_at=updated_at, time_zone=time_zone, updated_by=updated_by)
+        
+        if (dict is not None):
+            if len(dict) >0:
+                for key in dict:
+                    value = dict[key]
+                    if isinstance(value, Dict):
+                        value["name"] = name
+                        dict[key] = cls.add_audit_info(dest= value,  updated_at=updated_at, updated_by=updated_by)
         return dict
 
         

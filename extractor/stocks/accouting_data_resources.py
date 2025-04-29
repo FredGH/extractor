@@ -25,7 +25,7 @@ class AccountingDataDataResources():
                 if type(val) is dict: 
                     dictRecursiveFormat(val)
         ticker = td.TickerData(name).get_ticker
-        accounting_data = ad.AccountingData(ticker)
+        accounting_data = ad.AccountingData(yfTickerData=ticker)
         res = accounting_data.get_balance_sheet
         res = dictRecursiveFormat(res)
         res = res.to_dict(orient='records')

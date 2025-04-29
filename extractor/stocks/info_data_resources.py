@@ -11,19 +11,19 @@ class InfoDataResources():
     
     @classmethod
     @dlt.resource(name="info_data", parallelized=True)
-    def get_info_data(cls, names:list, period:str="1mo", updated_at:datetime=None, time_zone:str="", updated_by:str="")->Generator[Dict[str, Any], None, None]:
+    def get_info_data(cls, names:list, period:str="1mo", updated_at:datetime=None, time_:str="", updated_by:str="")->Generator[Dict[str, Any], None, None]:
         try:
             res = {}
             for name in names:
                 ticker = td.TickerData(name).get_ticker
-                info_data = id.InfoData(ticker)
+                info_data = id.InfoData(yfTickerData=ticker)
                 sub_res = info_data.get_info
-                sub_res["name"] = name
                 if sub_res is not None:
+                    sub_res["name"] = name
                     # parent dic decoration  
-                    sub_res = utl.add_audit_info(dest= sub_res, updated_at=updated_at, time_zone=time_zone,updated_by=updated_by )
+                    sub_res = utl.add_audit_info(dest= sub_res, updated_at=updated_at,updated_by=updated_by )
                     # nested child dics decoration  
-                    sub_res = utl.add_audit_info_nested_dictionaries(name=name, dict=sub_res, updated_at=updated_at, time_zone=time_zone, updated_by=updated_by)
+                    sub_res = utl.add_audit_info_nested_dictionaries(name=name, dict=sub_res, updated_at=updated_at, updated_by=updated_by)
                     # concat
                     res = utl.concat_dicts(dest=res, source=sub_res)
                 else:
