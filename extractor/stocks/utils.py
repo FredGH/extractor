@@ -83,13 +83,14 @@ class Utils:
                           updated_at: datetime = None,
                           updated_by: str = "system"):
 
-        print("{tag} -> Start data collection")
+        print(f"{tag}:{name} -> Start data collection")
         
         if len(name) == 0:
             raise Exception(
-                "collect_dict_data() -> name cannot be empty"
+                f"{tag}:{name} -> collect_dict_data() -> name cannot be empty"
             )
         if len(sub_res) > 0:
+            #if type(sub_res) is Dict:
             for sub_res_item in sub_res:
                 if sub_res_item is not None:
                     sub_res_item["name"] = name
@@ -110,9 +111,9 @@ class Utils:
                     res = cls.concat_dicts(dest=res, source=sub_res_item)
                 else:
                     print(
-                        f"{tag} -> None, i.e. not supported for the ticker name: {name}"
+                        f"{tag}:{name} -> None, i.e. not supported"
                     )
             if len(res) == 0:
-                print(f"{tag} -> No record found for ticker name: {name}")
-        print("{tag} -> data collection is complete with SUCCESS")
+                print(f"{tag}:{name} -> No record found")
+        print(f"{tag}:{name} -> data collection is complete with SUCCESS")
         return res

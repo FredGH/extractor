@@ -54,3 +54,31 @@ class InfoDataResources:
             print("get_info_data is complete with FAILURE - Exception: {0}".format(e))
         finally:
             print("continue")
+
+
+    @classmethod
+    @dlt.resource(name="info_data", parallelized=True)
+    def get_info_data_new(
+        cls,
+        names: list,
+        period: str = "1mo",
+        updated_at: datetime = None,
+        time_: str = "",
+        updated_by: str = "",
+    ) -> Generator[Dict[str, Any], None, None]:
+        try:
+            res = {}
+            for name in names:
+                ticker = td.TickerData(name).get_ticker
+                info_data = id.InfoData(yfTickerData=ticker)
+                sub_res = info_data.get_info
+                res = utl.collect_dict_data(name=name, 
+                                            res=res, sub_res=sub_res, 
+                                            tag="get_info_data", 
+                                            updated_at=updated_at, updated_by=updated_by)
+                yield res
+        except Exception as e:
+            # swallow
+            print("get_info_data is complete with FAILURE - Exception: {0}".format(e))
+        finally:
+            print("continue")

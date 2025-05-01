@@ -7,7 +7,6 @@ import dlt
 import pandas as pd
 from utils import Utils as utl
 
-
 class AnalystsDataSource:
     @classmethod
     @dlt.resource(name="analyst_price_targets", parallelized=True)

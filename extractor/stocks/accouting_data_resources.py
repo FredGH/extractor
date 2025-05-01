@@ -10,7 +10,6 @@ import data_providers.stocks.ticker_data as td
 import dlt
 import pandas as pd
 
-
 class AccountingDataDataResources:
     @classmethod
     @dlt.resource(name="get_balance_sheet_data")

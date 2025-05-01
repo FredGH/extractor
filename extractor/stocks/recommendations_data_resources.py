@@ -7,7 +7,6 @@ import dlt
 import pandas as pd
 from utils import Utils as utl
 
-
 class RecommendationsDataResources:
 
     @classmethod
