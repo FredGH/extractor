@@ -2,14 +2,14 @@ import datetime
 from datetime import timezone
 
 import dlt
-from analysts_data_resources import AnalystsDataSource as analysts_dr
-from historical_data_resources import HistoricalDataResources as hist_dr
-from info_data_resources import InfoDataResources as info_dr
-from news_data_resources import NewsDataResources as news_data_dr
-from recommendations_data_resources import (
+from extractor.assets.analysts_data_resources import AnalystsDataSource as analysts_dr
+from extractor.assets.historical_data_resources import HistoricalDataResources as hist_dr
+from extractor.assets.info_data_resources import InfoDataResources as info_dr
+from extractor.assets.news_data_resources import NewsDataResources as news_data_dr
+from extractor.assets.recommendations_data_resources import (
     RecommendationsDataResources as recommendations_data_dr,
 )
-from utils import Utils as utl
+from extractor.assets.utils import Utils as utl
 
 dict_assets = {}
 # dict_assets["crypto_data_extraction_pipeline"] = ["USDT","BTC","ETH","USDC", "XRP","SOL","BNB", "DOGE","ADA", "TRX"]
@@ -42,9 +42,9 @@ for key in dict_assets.keys():
     destination = "postgres"
 
     # res_historical_data = hist_dr.get_historical_data(names=tickers,period="max", updated_at=updated_at,  updated_by=updated_by)
-    res_info_data = info_dr.get_info_data(names=tickers,period="max", updated_at=updated_at,  updated_by=updated_by)
+    #res_info_data = info_dr.get_info_data(names=tickers,period="max", updated_at=updated_at,  updated_by=updated_by)
     ##resource = AccountingDataDataSource().get_balance_sheet(updated_at=updated_at,names=tickers)
-    # res_analyst_price_targets = analysts_dr.get_analyst_price_targets(names=tickers, updated_at=updated_at,  updated_by=updated_by)
+    res_analyst_price_targets = analysts_dr.get_analyst_price_targets(names=tickers, updated_at=updated_at,  updated_by=updated_by)
     #res_news = news_data_dr.get_news_data(names=tickers, updated_at=updated_at,  updated_by=updated_by)
     # res_recommendations = recommendations_data_dr.get_recommendations_data(names=tickers, updated_at=updated_at,  updated_by=updated_by)
     # res_recommendations_summary = (
@@ -52,6 +52,11 @@ for key in dict_assets.keys():
     #         names=tickers, updated_at=updated_at, updated_by=updated_by
     #     )
    #  )
+
+   # add the concept of a batch id and compare with dlt.... may not need it in the first place...
+   # add name the list of dic belonging to a dic
+   # may need to remove the concept of last updated 
+   # datatable shre code
 
     pipeline = dlt.pipeline(
         pipeline_name=pipeline_name,
@@ -62,8 +67,8 @@ for key in dict_assets.keys():
 
     load_info = pipeline.run(
         data=[  # res_historical_data,
-             res_info_data,
-            # res_analyst_price_targets,
+            #  res_info_data,
+             res_analyst_price_targets,
             # res_news
             # res_recommendations,
             # res_recommendations_summary
