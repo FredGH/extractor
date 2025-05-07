@@ -28,7 +28,7 @@ Provides the extraction layer between the providers and a destination db (here P
 * Install Requirements:
     * python3.11 -m pip install --upgrade pip
 * Build Package:
-    * pip3.11 install -U pip setuptools
+    * pip3.11 install -U pip setuptools==75.3.0
     * python3.11 setup.py sdist bdist_wheel
     * pip3.11 install -e .
     * [Optional]:

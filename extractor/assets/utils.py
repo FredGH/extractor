@@ -238,6 +238,7 @@ class Utils:
         print(f"{tag}:{name} -> data collection is complete with SUCCESS")
         return res
     
+    @classmethod
     def collect_dataframe_data(cls,
                         name:str="",  
                         res:Dict = None,
@@ -298,4 +299,4 @@ class Utils:
         if len(res) == 0:
             print(f"{tag}:{name} -> No record found for ticker")
         print(f"{tag}:{name} -> data collection is complete with SUCCESS")
-        yield res
+        return res
