@@ -17,6 +17,7 @@ class HistoricalDataResources:
         period: str = "1mo",
         updated_at: datetime = None,
         updated_by: str = "",
+        batch_id:str=""
     ) -> Generator[Dict[str, Any], None, None]:
         """
         The function `get_historical_data_old` retrieves historical data for a list of stock tickers and
@@ -44,6 +45,11 @@ class HistoricalDataResources:
         to track and record the user responsible for any updates made to the historical data during the
         function execution
         :type updated_by: str
+        :param batch_id: The `batch_id` parameter  is a
+        string parameter that is used to identify a specific batch of requests or operations. It can be
+        used to group related tasks together or to track a specific set of operations within a larger
+        process. This parameter allows for
+        :type batch_id: str
         """
         try:
             res = pd.DataFrame()
@@ -54,7 +60,7 @@ class HistoricalDataResources:
                 res = utl.collect_dataframe_data(name=name, 
                                                 res=res, sub_res=sub_res, 
                                                 tag="historical_data", 
-                                                updated_at=updated_at, updated_by=updated_by)
+                                                updated_at=updated_at, updated_by=updated_by, batch_id=batch_id)
             res = res.reset_index()
             res = res.to_dict(orient="records")
             print("get_historical_data is complete with SUCCESS")

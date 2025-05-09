@@ -12,7 +12,7 @@ class NewsDataResources:
     @classmethod
     @dlt.resource(name="news_data", parallelized=True)
     def get_news_data(
-        cls, names: list, updated_at: datetime = None, updated_by: str = ""
+        cls, names: list, updated_at: datetime = None, updated_by: str = "", batch_id:str=""
     ) -> Generator[Dict[str, Any], None, None]:
         """
         The function `get_news_data` retrieves news data for a list of names and yields a dictionary
@@ -35,6 +35,11 @@ class NewsDataResources:
         of an empty string, which means if no value is provided when calling the function, it will
         default to an empty string
         :type updated_by: str
+        :param batch_id: The `batch_id` parameter  is a
+        string parameter that is used to identify a specific batch of requests or operations. It can be
+        used to group related tasks together or to track a specific set of operations within a larger
+        process. This parameter allows for
+        :type batch_id: str
         """
         try:
             res = {}
@@ -45,7 +50,7 @@ class NewsDataResources:
                 res = utl.collect_dict_data(name=name, 
                                             res=res, sub_res=sub_res, 
                                             tag="get_news_data", 
-                                            updated_at=updated_at, updated_by=updated_by)
+                                            updated_at=updated_at, updated_by=updated_by, batch_id=batch_id)
                 yield res
         except Exception as e:
             # swallow

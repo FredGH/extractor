@@ -68,34 +68,38 @@ class Utils:
         dest: Union[Dict, pd.DataFrame],
         updated_at: datetime = None,
         updated_by: str = "",
+        batch_id:str=""
     ) -> Dict:
         """
-        The `add_audit_info` function adds audit information like `updated_at` and `updated_by` to a
-        dictionary or a pandas DataFrame.
+        The `add_audit_info` function adds audit information such as `updated_at`, `updated_by`, and
+        `batch_id` to a dictionary or a pandas DataFrame.
         
-        :param cls: The `cls` parameter in the `add_audit_info` function is a conventional name used to
-        represent the class itself. However, in this function, it is not being used within the method.
-        If this function is not a static method and needs to access class-level attributes or methods,
-        you may want
+        :param cls: In the provided function `add_audit_info`, the parameter `cls` is defined but not
+        used within the function. It is a common convention to use `cls` as a parameter name when
+        defining class methods, but in this case, it seems unnecessary as it is not being utilized in
+        the function logic
         :param dest: The `dest` parameter in the `add_audit_info` function is used to specify the
         destination where the audit information will be added. It can be either a dictionary (`Dict`) or
-        a pandas DataFrame (`pd.DataFrame`). The function will add the `updated_at` and `updated_by`
-        information to
+        a pandas DataFrame (`pd.DataFrame`). The function will add the `updated_at`, `updated_by`, and
+        `batch
         :type dest: Union[Dict, pd.DataFrame]
         :param updated_at: The `updated_at` parameter in the `add_audit_info` function is a datetime
-        object that represents the timestamp when the audit information was last updated. It is a
+        object that represents the date and time when the audit information was last updated. It is a
         required parameter and cannot be None
         :type updated_at: datetime
-        :param updated_by: The `updated_by` parameter in the `add_audit_info` function is a string that
-        represents the user or entity who updated the data. It is used to track and store information
-        about who made changes to the data
+        :param updated_by: The `updated_by` parameter in the `add_audit_info` function is used to
+        specify the name or identifier of the user who is updating the data. It is a string type
+        parameter and is set to an empty string by default
         :type updated_by: str
-        :return: The function `add_audit_info` returns the `dest` parameter after adding the
-        `updated_at` and `updated_by` audit information to it. If the `updated_at` parameter is None or
-        the `updated_by` parameter is an empty string, exceptions will be raised. If the `dest`
-        parameter is not None and is either a dictionary or a pandas DataFrame, the function will add
-        the
+        :param batch_id: The `batch_id` parameter in the `add_audit_info` function is used to specify
+        the batch ID associated with the audit information being added to the destination object (either
+        a dictionary or a pandas DataFrame). This parameter allows you to track and identify the batch
+        to which the updates or modifications belong
+        :type batch_id: str
+        :return: The function `add_audit_info` returns the `dest` object after adding the audit
+        information such as `updated_at`, `updated_by`, and `batch_id` to it.
         """
+       
         if updated_at is None:
             raise Exception("add_audit_info() -> updated_at cannot be None")
         if updated_by is None:
@@ -104,6 +108,7 @@ class Utils:
             if isinstance(dest, dict) or isinstance(dest, pd.DataFrame):
                 dest["updated_at"] = updated_at
                 dest["updated_by"] = updated_by
+                dest["batch_id"] =batch_id
             else:
                 raise Exception(
                     f"add_audit_info_dicts() -> type:  {type(dest)} is not supported "
@@ -117,6 +122,7 @@ class Utils:
         dict: Dict[Any, Any] = None,
         updated_at: datetime = None,
         updated_by: str = "system",
+        batch_id:str=""
     ) -> List[Dict[Any, Any]]:
         """
         The function `add_audit_info_nested_dictionaries` extracts all nested dictionaries that are
@@ -144,6 +150,11 @@ class Utils:
         it will default to "system, defaults to system
         :type updated_by: str (optional)
         :return: the updated dictionary with added audit information for nested dictionaries.
+        :param batch_id: The `batch_id` parameter  is a
+        string parameter that is used to identify a specific batch of requests or operations. It can be
+        used to group related tasks together or to track a specific set of operations within a larger
+        process. This parameter allows for
+        :type batch_id: str
         """
         if len(name) == 0:
             raise Exception(
@@ -157,7 +168,7 @@ class Utils:
                     if isinstance(value, Dict):
                         value["name"] = name
                         dict[key] = cls.add_audit_info(
-                            dest=value, updated_at=updated_at, updated_by=updated_by
+                            dest=value, updated_at=updated_at, updated_by=updated_by, batch_id=batch_id
                         )
         return dict
     
@@ -168,7 +179,8 @@ class Utils:
                           sub_res:Dict = None,
                           tag:str="",
                           updated_at: datetime = None,
-                          updated_by: str = "system"):
+                          updated_by: str = "system",
+                          batch_id:str=""):
         """
         The function `collect_dict_data` collects and processes dictionary data, ensuring the name is
         not empty and handling nested dictionaries.
@@ -189,7 +201,6 @@ class Utils:
         :param sub_res: The `sub_res` parameter in the `collect_dict_data` function is used to pass a
         dictionary or a list of dictionaries that contain additional data to be collected and processed.
         If `sub_res` is a dictionary, it will be added to the `res` dictionary after some modifications.
-        If `
         :type sub_res: Dict
         :param tag: The `tag` parameter in the `collect_dict_data` function is used to provide a tag or
         identifier for the specific data collection process. It helps in identifying and tracking the
@@ -207,6 +218,11 @@ class Utils:
         :type updated_by: str (optional)
         :return: The function `collect_dict_data` returns the dictionary `res` after collecting and
         processing data based on the input parameters and conditions within the function.
+        :param batch_id: The `batch_id` parameter  is a
+        string parameter that is used to identify a specific batch of requests or operations. It can be
+        used to group related tasks together or to track a specific set of operations within a larger
+        process. This parameter allows for
+        :type batch_id: str
         """  
         print(f"{tag}:{name} -> Start data collection")
         if len(name) == 0:
@@ -226,6 +242,7 @@ class Utils:
                         dict=sub_res_item,
                         updated_at=updated_at,
                         updated_by=updated_by,
+                        batch_id=batch_id
                     )
                     # concat
                     res = cls.concat_dicts(dest=res, source=sub_res_item)
@@ -245,7 +262,8 @@ class Utils:
                         sub_res:Dict = None,
                         tag:str="",
                         updated_at: datetime = None,
-                        updated_by: str = "system"): 
+                        updated_by: str = "system",
+                        batch_id:str=""): 
         """
         The function `collect_dataframe_data` collects data for a DataFrame with optional sub-data and
         audit information, handling empty name and displaying progress messages.
@@ -280,6 +298,11 @@ class Utils:
         of the data. By default, if no value is provided for `updated_by`, it is set to "system". This
         parameter helps in tracking and, defaults to system
         :type updated_by: str (optional)
+        :param batch_id: The `batch_id` parameter  is a
+        string parameter that is used to identify a specific batch of requests or operations. It can be
+        used to group related tasks together or to track a specific set of operations within a larger
+        process. This parameter allows for
+        :type batch_id: str
         """
         print(f"{tag}:{name} -> Start data collection")
         if len(name) == 0:
@@ -289,7 +312,7 @@ class Utils:
         if sub_res is not None:
             sub_res["name"] = name
             sub_res = cls.add_audit_info(
-                dest=sub_res, updated_at=updated_at, updated_by=updated_by
+                dest=sub_res, updated_at=updated_at, updated_by=updated_by, batch_id=batch_id
             )
             res = cls.concat_dataframes(dest=res, source=sub_res)
         else:

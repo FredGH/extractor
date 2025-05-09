@@ -11,30 +11,35 @@ class AnalystsDataSource:
     @classmethod
     @dlt.resource(name="analyst_price_targets", parallelized=True)
     def get_analyst_price_targets(
-        cls, names: list, updated_at: datetime = None, updated_by: str = ""
+        cls, names: list, updated_at: datetime = None, updated_by: str = "", batch_id:str="",
     ) -> Generator[Dict[str, Any], None, None]:
         """
         This Python function retrieves analyst price targets for a list of stock names and yields the
         results.
         
         :param cls: The `cls` parameter in the `get_analyst_price_targets` function refers to the class
-        itself. In Python, the first parameter of a class method is always a reference to the class
-        itself, conventionally named `cls`. This parameter is used to access class variables and methods
-        within the method
-        :param names: The `names` parameter in the `get_analyst_price_targets` function is expected to
-        be a list of strings representing the names of stocks or companies for which you want to
-        retrieve analyst price targets
+        itself. In this context, it is a conventional naming convention to use `cls` as the first
+        parameter in a class method, which represents the class itself when the method is called
+        :param names: The `names` parameter in the `get_analyst_price_targets` function is a list of
+        names for which you want to retrieve analyst price targets. Each name in the list represents a
+        stock or company for which you want to fetch analyst price targets
         :type names: list
-        :param updated_at: The `updated_at` parameter in the `get_analyst_price_targets` function is
-        used to specify the date and time at which the analyst price targets were last updated. It is an
-        optional parameter that defaults to `None` if not provided. This parameter allows you to track
-        when the analyst price
+        :param updated_at: The `updated_at` parameter in the `get_analyst_price_targets` function is a
+        datetime parameter that specifies the date and time when the analyst price targets were last
+        updated. It is an optional parameter, meaning it can be provided with a specific datetime value
+        or left empty (None) if not
         :type updated_at: datetime
         :param updated_by: The `updated_by` parameter in the `get_analyst_price_targets` function is a
         string parameter that represents the name or identifier of the user who updated the analyst
-        price targets. It is used to track who made the update to the analyst price targets data
+        price targets. It is used to track who made the update in the system
         :type updated_by: str
+        :param batch_id: The `batch_id` parameter  is a
+        string parameter that is used to identify a specific batch of requests or operations. It can be
+        used to group related tasks together or to track a specific set of operations within a larger
+        process. This parameter allows for
+        :type batch_id: str
         """
+
         res = {}
         try:
             for name in names:
@@ -44,7 +49,7 @@ class AnalystsDataSource:
                 res = utl.collect_dict_data(name=name, 
                                             res=res, sub_res=sub_res, 
                                             tag="get_analyst_price_targets", 
-                                            updated_at=updated_at, updated_by=updated_by)
+                                            updated_at=updated_at, updated_by=updated_by, batch_id=batch_id)
                 yield res
         except Exception as e:
             # swallow

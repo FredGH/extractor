@@ -12,7 +12,7 @@ class RecommendationsDataResources:
     @classmethod
     @dlt.resource(name="recommendations_data", parallelized=True)
     def get_recommendations_data(
-        cls, names: list, updated_at: datetime = None, updated_by: str = ""
+        cls, names: list, updated_at: datetime = None, updated_by: str = "", batch_id:str=""
     ) -> Generator[Dict[str, Any], None, None]:
         """
         The function `get_recommendations_data` retrieves recommendations data for a list of stock names
@@ -33,6 +33,11 @@ class RecommendationsDataResources:
         string that represents the user or entity who updated the recommendations data. It is used to
         track and log information about who made changes or updates to the data
         :type updated_by: str
+        :param batch_id: The `batch_id` parameter  is a
+        string parameter that is used to identify a specific batch of requests or operations. It can be
+        used to group related tasks together or to track a specific set of operations within a larger
+        process. This parameter allows for
+        :type batch_id: str
         """
         try:
             res = pd.DataFrame()
@@ -40,20 +45,12 @@ class RecommendationsDataResources:
                 ticker = td.TickerData(name).get_ticker
                 recommendations_data = rd.RecommendationsData(yfTickerData=ticker)
                 sub_res = recommendations_data.get_recommendations
-                if sub_res is not None:
-                    sub_res["name"] = name
-                    sub_res = utl.add_audit_info(
-                        dest=sub_res, updated_at=updated_at, updated_by=updated_by
-                    )
-                    res = utl.concat_dataframes(dest=res, source=sub_res)
-                else:
-                    print(
-                        f"get_recommendations_data ->  None, i.e. not supported for the ticker: {ticker}"
-                    )
+                res = utl.collect_dataframe_data(name=name, 
+                                                res=res, sub_res=sub_res, 
+                                                tag="recommendations_data", 
+                                                updated_at=updated_at, updated_by=updated_by, batch_id=batch_id)
             res = res.reset_index()
             res = res.to_dict(orient="records")
-            if len(res) == 0:
-                print(f"get_recommendations_data -> No record found for ticker: {name}")
             print("get_recommendations_data is complete with SUCCESS")
             yield res
         except Exception as e:
@@ -69,7 +66,7 @@ class RecommendationsDataResources:
     @classmethod
     @dlt.resource(name="recommendations_summary_data", parallelized=True)
     def get_recommendations_summary_data(
-        cls, names: list, updated_at: datetime = None, updated_by: str = ""
+        cls, names: list, updated_at: datetime = None, updated_by: str = "", batch_id:str=""
     ) -> Generator[Dict[str, Any], None, None]:
         """
         This function retrieves recommendations summary data for a list of stock tickers and adds audit
@@ -91,6 +88,12 @@ class RecommendationsDataResources:
         is a string parameter that represents the user or entity who updated the recommendations summary
         data. It is used to track and store information about who made the last update to the data
         :type updated_by: str
+        :param batch_id: The `batch_id` parameter  is a
+        string parameter that is used to identify a specific batch of requests or operations. It can be
+        used to group related tasks together or to track a specific set of operations within a larger
+        process. This parameter allows for
+        :type batch_id: str
+
         """
         try:
             res = pd.DataFrame()
@@ -98,28 +101,18 @@ class RecommendationsDataResources:
                 ticker = td.TickerData(name).get_ticker
                 recommendations_data = rd.RecommendationsData(yfTickerData=ticker)
                 sub_res = recommendations_data.get_recommendations_summary
-                if sub_res is not None:
-                    sub_res["name"] = name
-                    sub_res = utl.add_audit_info(
-                        dest=sub_res, updated_at=updated_at, updated_by=updated_by
-                    )
-                    res = utl.concat_dataframes(dest=res, source=sub_res)
-                else:
-                    print(
-                        f"recommendations_summary_data ->  None, i.e. not supported for the ticker: {ticker}"
-                    )
+                res = utl.collect_dataframe_data(name=name, 
+                                                res=res, sub_res=sub_res, 
+                                                tag="recommendations_summary_data", 
+                                                updated_at=updated_at, updated_by=updated_by, batch_id=batch_id)
             res = res.reset_index()
             res = res.to_dict(orient="records")
-            if len(res) == 0:
-                print(
-                    f"recommendations_summary_data -> No record found for ticker: {name}"
-                )
-            print("recommendations_summary_data is complete with SUCCESS")
+            print("get_recommendations_summary_data is complete with SUCCESS")
             yield res
         except Exception as e:
             # swallow
             print(
-                "recommendations_summary_data is complete with FAILURE - Exception: {0}".format(
+                "get_recommendations_summary_data is complete with FAILURE - Exception: {0}".format(
                     e
                 )
             )
