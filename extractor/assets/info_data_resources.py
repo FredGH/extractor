@@ -4,8 +4,9 @@ from typing import Any, Dict, Generator
 import data_providers.stocks.info_data as id
 import data_providers.stocks.ticker_data as td
 import dlt
-import pandas as pd
-from  extractor.assets.utils import Utils as utl
+
+from extractor.assets.utils import Utils as utl
+
 
 class InfoDataResources:
 
@@ -18,12 +19,12 @@ class InfoDataResources:
         updated_at: datetime = None,
         time_: str = "",
         updated_by: str = "",
-        batch_id:str=""
+        batch_id: str = "",
     ) -> Generator[Dict[str, Any], None, None]:
         """
         The function `get_info_data` retrieves information data for a list of names using external APIs
         and yields the results.
-        
+
         :param cls: The `cls` parameter in the `get_info_data` function is a reference to the class
         itself. In Python, the `cls` parameter is used in class methods to refer to the class object. It
         is similar to the `self` parameter used in instance methods, but `cls` is
@@ -61,10 +62,15 @@ class InfoDataResources:
                 ticker = td.TickerData(name).get_ticker
                 info_data = id.InfoData(yfTickerData=ticker)
                 sub_res = info_data.get_info
-                res = utl.collect_dict_data(name=name, 
-                                            res=res, sub_res=sub_res, 
-                                            tag="get_info_data", 
-                                            updated_at=updated_at, updated_by=updated_by, batch_id=batch_id)
+                res = utl.collect_dict_data(
+                    name=name,
+                    res=res,
+                    sub_res=sub_res,
+                    tag="get_info_data",
+                    updated_at=updated_at,
+                    updated_by=updated_by,
+                    batch_id=batch_id,
+                )
                 yield res
         except Exception as e:
             # swallow

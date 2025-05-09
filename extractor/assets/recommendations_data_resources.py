@@ -5,19 +5,25 @@ import data_providers.stocks.recommendations_data as rd
 import data_providers.stocks.ticker_data as td
 import dlt
 import pandas as pd
-from  extractor.assets.utils import Utils as utl
+
+from extractor.assets.utils import Utils as utl
+
 
 class RecommendationsDataResources:
 
     @classmethod
     @dlt.resource(name="recommendations_data", parallelized=True)
     def get_recommendations_data(
-        cls, names: list, updated_at: datetime = None, updated_by: str = "", batch_id:str=""
+        cls,
+        names: list,
+        updated_at: datetime = None,
+        updated_by: str = "",
+        batch_id: str = "",
     ) -> Generator[Dict[str, Any], None, None]:
         """
         The function `get_recommendations_data` retrieves recommendations data for a list of stock names
         and adds audit information before yielding the results.
-        
+
         :param cls: In the provided function `get_recommendations_data`, the parameter `cls` appears to
         be a class reference. It is commonly used in class methods in Python to refer to the class
         itself. This parameter allows the method to access class-level variables and methods
@@ -45,10 +51,15 @@ class RecommendationsDataResources:
                 ticker = td.TickerData(name).get_ticker
                 recommendations_data = rd.RecommendationsData(yfTickerData=ticker)
                 sub_res = recommendations_data.get_recommendations
-                res = utl.collect_dataframe_data(name=name, 
-                                                res=res, sub_res=sub_res, 
-                                                tag="recommendations_data", 
-                                                updated_at=updated_at, updated_by=updated_by, batch_id=batch_id)
+                res = utl.collect_dataframe_data(
+                    name=name,
+                    res=res,
+                    sub_res=sub_res,
+                    tag="recommendations_data",
+                    updated_at=updated_at,
+                    updated_by=updated_by,
+                    batch_id=batch_id,
+                )
             res = res.reset_index()
             res = res.to_dict(orient="records")
             print("get_recommendations_data is complete with SUCCESS")
@@ -66,12 +77,16 @@ class RecommendationsDataResources:
     @classmethod
     @dlt.resource(name="recommendations_summary_data", parallelized=True)
     def get_recommendations_summary_data(
-        cls, names: list, updated_at: datetime = None, updated_by: str = "", batch_id:str=""
+        cls,
+        names: list,
+        updated_at: datetime = None,
+        updated_by: str = "",
+        batch_id: str = "",
     ) -> Generator[Dict[str, Any], None, None]:
         """
         This function retrieves recommendations summary data for a list of stock tickers and adds audit
         information before yielding the results.
-        
+
         :param cls: The `cls` parameter in the `get_recommendations_summary_data` function is a
         conventional name used in Python to represent the class itself. It is used as the first
         parameter in class methods to refer to the class itself within the method
@@ -101,10 +116,15 @@ class RecommendationsDataResources:
                 ticker = td.TickerData(name).get_ticker
                 recommendations_data = rd.RecommendationsData(yfTickerData=ticker)
                 sub_res = recommendations_data.get_recommendations_summary
-                res = utl.collect_dataframe_data(name=name, 
-                                                res=res, sub_res=sub_res, 
-                                                tag="recommendations_summary_data", 
-                                                updated_at=updated_at, updated_by=updated_by, batch_id=batch_id)
+                res = utl.collect_dataframe_data(
+                    name=name,
+                    res=res,
+                    sub_res=sub_res,
+                    tag="recommendations_summary_data",
+                    updated_at=updated_at,
+                    updated_by=updated_by,
+                    batch_id=batch_id,
+                )
             res = res.reset_index()
             res = res.to_dict(orient="records")
             print("get_recommendations_summary_data is complete with SUCCESS")

@@ -1,7 +1,8 @@
 import datetime
+from typing import Any, Dict, List, Union
+
 import pandas as pd
 
-from typing import Any, Dict, List, Union
 
 class Utils:
     @classmethod
@@ -10,7 +11,7 @@ class Utils:
     ) -> pd.DataFrame():
         """
         The function `concat_dataframes` concatenates two DataFrames, optionally resetting the index.
-        
+
         :param cls: The `cls` parameter in the `concat_dataframes` function is typically used as a
         reference to the class itself. However, in this function, it is not being used. It seems like it
         was mistakenly included in the function definition. If you don't need it, you can remove it from
@@ -44,7 +45,7 @@ class Utils:
         """
         The function `concat_dicts` takes two dictionaries `dest` and `source` and concatenates them
         using the `|` operator.
-        
+
         :param cls: The `cls` parameter in the `concat_dicts` function appears to be a reference to the
         class itself. However, in the provided implementation, the `cls` parameter is not being used
         within the function. It is common to use `cls` as a reference to the class when defining class
@@ -68,12 +69,12 @@ class Utils:
         dest: Union[Dict, pd.DataFrame],
         updated_at: datetime = None,
         updated_by: str = "",
-        batch_id:str=""
+        batch_id: str = "",
     ) -> Dict:
         """
         The `add_audit_info` function adds audit information such as `updated_at`, `updated_by`, and
         `batch_id` to a dictionary or a pandas DataFrame.
-        
+
         :param cls: In the provided function `add_audit_info`, the parameter `cls` is defined but not
         used within the function. It is a common convention to use `cls` as a parameter name when
         defining class methods, but in this case, it seems unnecessary as it is not being utilized in
@@ -99,7 +100,7 @@ class Utils:
         :return: The function `add_audit_info` returns the `dest` object after adding the audit
         information such as `updated_at`, `updated_by`, and `batch_id` to it.
         """
-       
+
         if updated_at is None:
             raise Exception("add_audit_info() -> updated_at cannot be None")
         if updated_by is None:
@@ -108,7 +109,7 @@ class Utils:
             if isinstance(dest, dict) or isinstance(dest, pd.DataFrame):
                 dest["updated_at"] = updated_at
                 dest["updated_by"] = updated_by
-                dest["batch_id"] =batch_id
+                dest["batch_id"] = batch_id
             else:
                 raise Exception(
                     f"add_audit_info_dicts() -> type:  {type(dest)} is not supported "
@@ -122,12 +123,12 @@ class Utils:
         dict: Dict[Any, Any] = None,
         updated_at: datetime = None,
         updated_by: str = "system",
-        batch_id:str=""
+        batch_id: str = "",
     ) -> List[Dict[Any, Any]]:
         """
         The function `add_audit_info_nested_dictionaries` extracts all nested dictionaries that are
         direct values within a given dictionary and adds audit information to them.
-        
+
         :param cls: The `cls` parameter in the `add_audit_info_nested_dictionaries` function represents
         the class itself. It is used within the function to access class methods or attributes
         :param name: The `name` parameter in the `add_audit_info_nested_dictionaries` function is a
@@ -168,23 +169,28 @@ class Utils:
                     if isinstance(value, Dict):
                         value["name"] = name
                         dict[key] = cls.add_audit_info(
-                            dest=value, updated_at=updated_at, updated_by=updated_by, batch_id=batch_id
+                            dest=value,
+                            updated_at=updated_at,
+                            updated_by=updated_by,
+                            batch_id=batch_id,
                         )
         return dict
-    
+
     @classmethod
-    def collect_dict_data(cls,
-                          name:str="",  
-                          res:Dict = None,
-                          sub_res:Dict = None,
-                          tag:str="",
-                          updated_at: datetime = None,
-                          updated_by: str = "system",
-                          batch_id:str=""):
+    def collect_dict_data(
+        cls,
+        name: str = "",
+        res: Dict = None,
+        sub_res: Dict = None,
+        tag: str = "",
+        updated_at: datetime = None,
+        updated_by: str = "system",
+        batch_id: str = "",
+    ):
         """
         The function `collect_dict_data` collects and processes dictionary data, ensuring the name is
         not empty and handling nested dictionaries.
-        
+
         :param cls: In the provided code snippet, the parameter `cls` is used as a reference to the
         class itself. It is commonly used in class methods in Python to access class attributes and
         methods. In this context, `cls` is likely a reference to the class that contains the
@@ -223,16 +229,16 @@ class Utils:
         used to group related tasks together or to track a specific set of operations within a larger
         process. This parameter allows for
         :type batch_id: str
-        """  
+        """
         print(f"{tag}:{name} -> Start data collection")
         if len(name) == 0:
             raise Exception(
                 f"{tag}:{name} -> collect_dict_data() -> name cannot be empty"
             )
         if len(sub_res) > 0:
-            if not isinstance(sub_res, list) :
+            if not isinstance(sub_res, list):
                 sub_res = [sub_res]
-            #if type(sub_res) is Dict:
+            # if type(sub_res) is Dict:
             for sub_res_item in sub_res:
                 if sub_res_item is not None:
                     sub_res_item["name"] = name
@@ -242,32 +248,32 @@ class Utils:
                         dict=sub_res_item,
                         updated_at=updated_at,
                         updated_by=updated_by,
-                        batch_id=batch_id
+                        batch_id=batch_id,
                     )
                     # concat
                     res = cls.concat_dicts(dest=res, source=sub_res_item)
                 else:
-                    print(
-                        f"{tag}:{name} -> None, i.e. not supported"
-                    )
+                    print(f"{tag}:{name} -> None, i.e. not supported")
             if len(res) == 0:
                 print(f"{tag}:{name} -> No record found")
         print(f"{tag}:{name} -> data collection is complete with SUCCESS")
         return res
-    
+
     @classmethod
-    def collect_dataframe_data(cls,
-                        name:str="",  
-                        res:Dict = None,
-                        sub_res:Dict = None,
-                        tag:str="",
-                        updated_at: datetime = None,
-                        updated_by: str = "system",
-                        batch_id:str=""): 
+    def collect_dataframe_data(
+        cls,
+        name: str = "",
+        res: Dict = None,
+        sub_res: Dict = None,
+        tag: str = "",
+        updated_at: datetime = None,
+        updated_by: str = "system",
+        batch_id: str = "",
+    ):
         """
         The function `collect_dataframe_data` collects data for a DataFrame with optional sub-data and
         audit information, handling empty name and displaying progress messages.
-        
+
         :param cls: The `cls` parameter in the `collect_dataframe_data` function is typically used as a
         reference to the class itself. It is commonly used within class methods to access class
         attributes or methods. In this context, `cls` seems to be a reference to the class that contains
@@ -306,19 +312,18 @@ class Utils:
         """
         print(f"{tag}:{name} -> Start data collection")
         if len(name) == 0:
-            raise Exception(
-                f"{tag}:{name} -> name cannot be empty"
-            )
+            raise Exception(f"{tag}:{name} -> name cannot be empty")
         if sub_res is not None:
             sub_res["name"] = name
             sub_res = cls.add_audit_info(
-                dest=sub_res, updated_at=updated_at, updated_by=updated_by, batch_id=batch_id
+                dest=sub_res,
+                updated_at=updated_at,
+                updated_by=updated_by,
+                batch_id=batch_id,
             )
             res = cls.concat_dataframes(dest=res, source=sub_res)
         else:
-            print(
-                f"{tag}:{name} ->  None, i.e. not supported for the ticker: {ticker}"
-            )
+            print(f"{tag}:{name} ->  None, i.e. not supported")
         if len(res) == 0:
             print(f"{tag}:{name} -> No record found for ticker")
         print(f"{tag}:{name} -> data collection is complete with SUCCESS")

@@ -4,19 +4,24 @@ from typing import Any, Dict, Generator
 import data_providers.stocks.analysts_data as ad
 import data_providers.stocks.ticker_data as td
 import dlt
-import pandas as pd
+
 from extractor.assets.utils import Utils as utl
+
 
 class AnalystsDataSource:
     @classmethod
     @dlt.resource(name="analyst_price_targets", parallelized=True)
     def get_analyst_price_targets(
-        cls, names: list, updated_at: datetime = None, updated_by: str = "", batch_id:str="",
+        cls,
+        names: list,
+        updated_at: datetime = None,
+        updated_by: str = "",
+        batch_id: str = "",
     ) -> Generator[Dict[str, Any], None, None]:
         """
         This Python function retrieves analyst price targets for a list of stock names and yields the
         results.
-        
+
         :param cls: The `cls` parameter in the `get_analyst_price_targets` function refers to the class
         itself. In this context, it is a conventional naming convention to use `cls` as the first
         parameter in a class method, which represents the class itself when the method is called
@@ -46,13 +51,22 @@ class AnalystsDataSource:
                 ticker = td.TickerData(name).get_ticker
                 analysts_data = ad.AnalystsData(yfTickerData=ticker)
                 sub_res = analysts_data.get_analyst_price_targets
-                res = utl.collect_dict_data(name=name, 
-                                            res=res, sub_res=sub_res, 
-                                            tag="get_analyst_price_targets", 
-                                            updated_at=updated_at, updated_by=updated_by, batch_id=batch_id)
+                res = utl.collect_dict_data(
+                    name=name,
+                    res=res,
+                    sub_res=sub_res,
+                    tag="get_analyst_price_targets",
+                    updated_at=updated_at,
+                    updated_by=updated_by,
+                    batch_id=batch_id,
+                )
                 yield res
         except Exception as e:
             # swallow
-            print("get_analyst_price_targets is complete with FAILURE - Exception: {0}".format(e))
+            print(
+                "get_analyst_price_targets is complete with FAILURE - Exception: {0}".format(
+                    e
+                )
+            )
         finally:
             print("continue")

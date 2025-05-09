@@ -5,7 +5,9 @@ import data_providers.stocks.historical_data as hd
 import data_providers.stocks.ticker_data as td
 import dlt
 import pandas as pd
+
 from extractor.assets.utils import Utils as utl
+
 
 class HistoricalDataResources:
 
@@ -17,12 +19,12 @@ class HistoricalDataResources:
         period: str = "1mo",
         updated_at: datetime = None,
         updated_by: str = "",
-        batch_id:str=""
+        batch_id: str = "",
     ) -> Generator[Dict[str, Any], None, None]:
         """
         The function `get_historical_data_old` retrieves historical data for a list of stock tickers and
         yields the results as a generator.
-        
+
         :param cls: The `cls` parameter in the `get_historical_data_old` method refers to the class
         itself. In this case, it is a class method, and `cls` is used as a conventional name for the
         class itself. It is not used within the method implementation provided, so it can be
@@ -57,10 +59,15 @@ class HistoricalDataResources:
                 ticker = td.TickerData(name).get_ticker
                 historical_data = hd.HistoricalData(yfTickerData=ticker)
                 sub_res = historical_data.get_historical_data(period)
-                res = utl.collect_dataframe_data(name=name, 
-                                                res=res, sub_res=sub_res, 
-                                                tag="historical_data", 
-                                                updated_at=updated_at, updated_by=updated_by, batch_id=batch_id)
+                res = utl.collect_dataframe_data(
+                    name=name,
+                    res=res,
+                    sub_res=sub_res,
+                    tag="historical_data",
+                    updated_at=updated_at,
+                    updated_by=updated_by,
+                    batch_id=batch_id,
+                )
             res = res.reset_index()
             res = res.to_dict(orient="records")
             print("get_historical_data is complete with SUCCESS")

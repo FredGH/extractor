@@ -4,20 +4,25 @@ from typing import Any, Dict, Generator
 import data_providers.stocks.news_data as nd
 import data_providers.stocks.ticker_data as td
 import dlt
-import pandas as pd
-from  extractor.assets.utils import Utils as utl
+
+from extractor.assets.utils import Utils as utl
+
 
 class NewsDataResources:
 
     @classmethod
     @dlt.resource(name="news_data", parallelized=True)
     def get_news_data(
-        cls, names: list, updated_at: datetime = None, updated_by: str = "", batch_id:str=""
+        cls,
+        names: list,
+        updated_at: datetime = None,
+        updated_by: str = "",
+        batch_id: str = "",
     ) -> Generator[Dict[str, Any], None, None]:
         """
         The function `get_news_data` retrieves news data for a list of names and yields a dictionary
         containing the collected data.
-        
+
         :param cls: In the provided function `get_news_data`, the parameter `cls` appears to be a class
         method. It is commonly used in Python as the first parameter in a class method to refer to the
         class itself. This parameter allows the method to access class variables and methods
@@ -47,10 +52,15 @@ class NewsDataResources:
                 ticker = td.TickerData(name).get_ticker
                 news_data = nd.NewsData(yfTickerData=ticker)
                 sub_res = news_data.get_news
-                res = utl.collect_dict_data(name=name, 
-                                            res=res, sub_res=sub_res, 
-                                            tag="get_news_data", 
-                                            updated_at=updated_at, updated_by=updated_by, batch_id=batch_id)
+                res = utl.collect_dict_data(
+                    name=name,
+                    res=res,
+                    sub_res=sub_res,
+                    tag="get_news_data",
+                    updated_at=updated_at,
+                    updated_by=updated_by,
+                    batch_id=batch_id,
+                )
                 yield res
         except Exception as e:
             # swallow
